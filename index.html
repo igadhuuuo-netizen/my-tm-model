@@ -3,277 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Vision Classifier</title>
-    <!-- Importing a clean, modern Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>AI Vision Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary: #3a8dff;
-            --primary-hover: #00d2ff;
-            --bg-color: #12121c;
-            --card-bg: #1e1e2f;
-            --text-main: #ffffff;
-            --text-muted: #a0a0b5;
+            --neon-blue: #00f0ff;
+            --neon-purple: #8a2be2;
+            --glass-bg: rgba(20, 20, 35, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+            color: #fff;
+            /* Animated gradient background */
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #0f0c29);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
         }
 
-        /* Main Container Card */
-        .app-container {
-            background-color: var(--card-bg);
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* The Frosted Glass Card */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            max-width: 500px;
-            width: 100%;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
             text-align: center;
+            position: relative;
+        }
+
+        /* Decorative glowing orbs behind the card */
+        .glass-panel::before, .glass-panel::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(60px);
+            opacity: 0.6;
+        }
+        .glass-panel::before {
+            width: 200px; height: 200px;
+            background: var(--neon-blue);
+            top: -50px; left: -50px;
+        }
+        .glass-panel::after {
+            width: 200px; height: 200px;
+            background: var(--neon-purple);
+            bottom: -50px; right: -50px;
         }
 
         h1 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-weight: 800;
-            font-size: 28px;
-            letter-spacing: -0.5px;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            font-size: 32px;
+            background: -webkit-linear-gradient(45deg, var(--neon-blue), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        p.description {
-            color: var(--text-muted);
-            font-size: 15px;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-
-        /* Status and Confirmations */
-        #status-message {
+        p.subtitle {
+            color: #b0b0c0;
             font-size: 14px;
-            font-weight: 600;
-            color: var(--primary-hover);
-            margin-bottom: 20px;
-            min-height: 20px; /* Prevents layout shift */
-            transition: color 0.3s;
+            margin-bottom: 30px;
+            font-weight: 300;
         }
 
-        /* Start Button */
-        button {
-            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+        /* Sleek Button */
+        .glow-btn {
+            background: transparent;
             color: #fff;
-            border: none;
-            padding: 14px 35px;
+            border: 2px solid var(--neon-blue);
+            padding: 12px 40px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(58, 141, 255, 0.3);
-            width: 100%;
-            max-width: 250px;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+            position: relative;
+            overflow: hidden;
         }
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(0, 210, 255, 0.4);
+        .glow-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+            transform: translateY(-2px);
         }
 
-        button:disabled {
-            background: #333344;
-            color: #777;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
+        #status-text {
+            display: block;
+            margin-top: 15px;
+            font-size: 13px;
+            color: var(--neon-blue);
+            height: 20px;
         }
 
-        /* Webcam styling */
+        /* Camera Feed */
         #webcam-container {
             margin-top: 25px;
-            border-radius: 16px;
-            overflow: hidden;
-            display: none; /* Hidden until loaded */
+            display: none;
             justify-content: center;
-            border: 3px solid var(--primary);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
         #webcam-container canvas {
-            display: block;
-            border-radius: 12px;
-            width: 100%; /* Responsive to container */
-            max-width: 300px; /* Prevents it from getting too huge */
-            height: auto;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 280px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255,255,255,0.05);
         }
 
-        /* Prediction Bars Styling */
+        /* Futuristic Progress Bars */
         #label-container {
-            margin-top: 25px;
-            display: none; /* Hidden until loaded */
+            margin-top: 30px;
+            display: none;
             flex-direction: column;
-            gap: 15px;
+            gap: 18px;
             text-align: left;
         }
 
-        .prediction-row {
+        .pred-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
-        .class-label {
-            font-weight: 600;
-            font-size: 15px;
+        .pred-value {
+            color: var(--neon-blue);
+            font-weight: 700;
         }
 
-        .class-percent {
-            font-weight: 800;
-            color: var(--primary-hover);
-        }
-
-        .progress-bar-bg {
-            background-color: #2a2a40;
-            border-radius: 10px;
-            height: 12px;
+        .track {
             width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             overflow: hidden;
         }
 
-        .progress-bar-fill {
-            background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+        .fill {
             height: 100%;
-            width: 0%; /* Adjusted by JavaScript */
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
             border-radius: 10px;
-            transition: width 0.1s ease-out; /* Smooth animation for live bar */
+            transition: width 0.15s ease-out;
+            box-shadow: 0 0 10px var(--neon-blue);
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <h1>Vision Classifier</h1>
-        <p class="description">Click start and face the camera. The AI will analyze your feed in real-time to detect if you are wearing glasses or not.</p>
+    <div class="glass-panel">
+        <h1>Vision AI</h1>
+        <p class="subtitle">Real-time object classification</p>
         
-        <div id="status-message"></div>
-        
-        <button type="button" id="start-btn" onclick="init()">Start Camera</button>
+        <button class="glow-btn" id="start-btn" onclick="init()">Initialize</button>
+        <span id="status-text"></span>
         
         <div id="webcam-container"></div>
         <div id="label-container"></div>
     </div>
 
-    <!-- AI Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     
     <script type="text/javascript">
-        // Points to the current folder on your GitHub
-        const URL = "./";
+        const URL = "./"; // Your local model path
 
         let model, webcam, labelContainer, maxPredictions;
-        const statusText = document.getElementById("status-message");
-        const startBtn = document.getElementById("start-btn");
+        const btn = document.getElementById("start-btn");
+        const status = document.getElementById("status-text");
 
         async function init() {
             try {
-                // Disable button and update status so user knows it's working
-                startBtn.disabled = true;
-                startBtn.innerText = "Initializing...";
-                statusText.innerText = "Downloading AI Model... (This takes a moment)";
-                statusText.style.color = "#a0a0b5";
+                btn.style.display = "none";
+                status.innerText = "Connecting to Neural Network...";
 
                 const modelURL = URL + "model.json";
                 const metadataURL = URL + "metadata.json";
 
-                // Load the model
                 model = await tmImage.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
 
-                statusText.innerText = "Requesting camera permissions...";
+                status.innerText = "Accessing optical sensor...";
 
-                // Setup the webcam
                 const flip = true; 
-                webcam = new tmImage.Webcam(300, 300, flip); // Slightly larger camera resolution
+                webcam = new tmImage.Webcam(300, 300, flip); 
                 
-                await webcam.setup(); // request access to the webcam
+                await webcam.setup();
                 await webcam.play();
-                
                 window.requestAnimationFrame(loop);
 
-                // Reveal containers
                 document.getElementById("webcam-container").style.display = "flex";
                 document.getElementById("label-container").style.display = "flex";
-                
-                // Append canvas
                 document.getElementById("webcam-container").appendChild(webcam.canvas);
                 
-                // Build dynamic progress bars instead of simple text
                 labelContainer = document.getElementById("label-container");
                 for (let i = 0; i < maxPredictions; i++) {
-                    const classWrapper = document.createElement("div");
-                    
-                    // Create the HTML structure for each prediction label & progress bar
-                    classWrapper.innerHTML = `
-                        <div class="prediction-row">
-                            <span class="class-label" id="label-name-${i}">Loading...</span>
-                            <span class="class-percent" id="label-percent-${i}">0%</span>
+                    const row = document.createElement("div");
+                    row.innerHTML = `
+                        <div class="pred-header">
+                            <span id="name-${i}">Class</span>
+                            <span class="pred-value" id="val-${i}">0%</span>
                         </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" id="label-bar-${i}"></div>
+                        <div class="track">
+                            <div class="fill" id="fill-${i}"></div>
                         </div>
                     `;
-                    labelContainer.appendChild(classWrapper);
+                    labelContainer.appendChild(row);
                 }
 
-                // Final status update
-                statusText.innerText = "Model loaded successfully! Running analysis.";
-                statusText.style.color = "#00d2ff";
-                startBtn.style.display = "none"; // Hide button once running
+                status.innerText = "Analysis Active";
+                status.style.color = "#00f0ff";
 
             } catch (error) {
-                // Error handling if camera is denied or files are missing
-                statusText.innerText = "Error: Please allow camera access and ensure files are correct.";
-                statusText.style.color = "#ff4a4a";
-                startBtn.disabled = false;
-                startBtn.innerText = "Try Again";
-                console.error(error);
+                status.innerText = "System Error: Check camera permissions.";
+                status.style.color = "#ff3366";
+                btn.style.display = "inline-block";
+                btn.innerText = "Retry";
             }
         }
 
         async function loop() {
-            webcam.update(); // update the webcam frame
+            webcam.update(); 
             await predict();
             window.requestAnimationFrame(loop);
         }
 
         async function predict() {
-            // run the webcam image through the image model
             const prediction = await model.predict(webcam.canvas);
             
             for (let i = 0; i < maxPredictions; i++) {
-                // Calculate percentage
-                const percentage = (prediction[i].probability * 100).toFixed(0);
-                const className = prediction[i].className;
-
-                // Update text and progress bar widths dynamically
-                document.getElementById(`label-name-${i}`).innerText = className;
-                document.getElementById(`label-percent-${i}`).innerText = percentage + "%";
-                document.getElementById(`label-bar-${i}`).style.width = percentage + "%";
+                const percent = Math.round(prediction[i].probability * 100);
                 
-                // Optional: Change bar color if it's highly confident
-                if(percentage > 85) {
-                    document.getElementById(`label-bar-${i}`).style.background = "linear-gradient(90deg, #00d2ff, #00ff88)";
+                document.getElementById(`name-${i}`).innerText = prediction[i].className;
+                document.getElementById(`val-${i}`).innerText = percent + "%";
+                document.getElementById(`fill-${i}`).style.width = percent + "%";
+                
+                // Color shifting based on confidence
+                const fillBar = document.getElementById(`fill-${i}`);
+                if (percent > 85) {
+                    fillBar.style.background = "linear-gradient(90deg, #00f0ff, #00ff88)";
+                    fillBar.style.boxShadow = "0 0 15px #00ff88";
                 } else {
-                    document.getElementById(`label-bar-${i}`).style.background = "linear-gradient(90deg, #3a8dff, #00d2ff)";
+                    fillBar.style.background = "linear-gradient(90deg, #8a2be2, #00f0ff)";
+                    fillBar.style.boxShadow = "0 0 10px #00f0ff";
                 }
             }
         }
